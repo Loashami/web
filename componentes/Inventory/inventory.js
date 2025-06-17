@@ -78,8 +78,12 @@
 
     [searchInput, categoryFilter, statusFilter].forEach(el => el.addEventListener("input", populateTable));
 
-    // Fill category dropdown
+
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Llenar filtro de categorías
     const categories = [...new Set(inventory.map(i => i.category))];
+    const categoryFilter = document.getElementById("categoryFilter");
     categories.forEach(cat => {
       const option = document.createElement("option");
       option.value = cat;
@@ -87,5 +91,6 @@
       categoryFilter.appendChild(option);
     });
 
-    // Initial render
+    // Mostrar la tabla al cargar
     populateTable();
+  });
