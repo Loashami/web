@@ -1,4 +1,4 @@
-// routes.js u "java.js" — Router + loader general actualizado
+// java.js — Router + loader general corregido
 
 const currentPath = window.location.pathname;
 
@@ -16,6 +16,7 @@ const routes = [
 const sidebar = document.getElementById("sidebar-links");
 const main = document.getElementById("main-content");
 
+// Carga los links del sidebar
 routes.forEach(route => {
   const link = document.createElement("a");
   link.href = route.href;
@@ -66,6 +67,11 @@ function loadScript(scriptUrl) {
   const script = document.createElement("script");
   script.src = scriptUrl;
   script.id = "dynamic-script";
+  script.onload = () => {
+    if (typeof initComponent === "function") {
+      initComponent(); // ✅ Ejecuta la función cuando el script se cargue
+    }
+  };
   document.body.appendChild(script);
 }
 
