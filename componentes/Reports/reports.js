@@ -1,3 +1,4 @@
+function initComponent() {
 window.onload = function () {
   // Datos simulados
   const mockStats = {
@@ -142,3 +143,4 @@ new Chart(staffCtx, {
   document.getElementById('printBtn').addEventListener('click', () => window.print());
   document.getElementById('exportBtn').addEventListener('click', () => alert('Exportando datos...'));
 };
+}
