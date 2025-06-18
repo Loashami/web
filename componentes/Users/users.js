@@ -1,4 +1,4 @@
-
+function initComponent() {
     const users = [
       { id: 1, name: "Dr. Sarah Johnson", email: "sarah.johnson@vetclinic.com", role: "veterinarian", specialty: "General Practice", status: "active", lastActive: "2025-05-19T14:30:00" },
       { id: 2, name: "Dr. Michael Chen", email: "michael.chen@vetclinic.com", role: "veterinarian", specialty: "Surgery", status: "active", lastActive: "2025-05-19T10:15:00" },
@@ -61,3 +61,4 @@
     document.getElementById('searchInput').addEventListener('input', renderUsers);
 
     renderUsers();
+  }
