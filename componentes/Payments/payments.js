@@ -1,5 +1,5 @@
 
-
+function initComponent() {
     const payments = [
       { id: "1", date: "2025-05-18", client: "John Doe", amount: 85, service: "Vaccination", method: "credit_card", status: "completed", reference: "PAY-1234567890" },
       { id: "2", date: "2025-05-17", client: "Sarah Smith", amount: 120, service: "Dental Cleaning", method: "paypal", status: "completed", reference: "PAY-0987654321" },
@@ -75,3 +75,4 @@
       document.getElementById("filter-date").value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
       renderTable();
     });
+  }
