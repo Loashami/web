@@ -52,7 +52,7 @@ function initComponent() {
     }
   }
 
-  function setTab(tab, event) {
+  function setTab(tab, event = null) {
     activeTab = tab;
     renderUsers();
 
@@ -60,7 +60,12 @@ function initComponent() {
       btn.classList.remove('bg-blue-100', 'text-blue-600');
     });
 
-    event.target.classList.add('bg-blue-100', 'text-blue-600');
+    if (event) {
+      event.target.classList.add('bg-blue-100', 'text-blue-600');
+    } else {
+      const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+      if (btn) btn.classList.add('bg-blue-100', 'text-blue-600');
+    }
   }
 
   document.getElementById('searchInput').addEventListener('input', renderUsers);
@@ -74,3 +79,5 @@ function initComponent() {
 
   renderUsers();
 }
+
+initComponent();

@@ -20,11 +20,11 @@
 
         <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
           <div class="flex gap-2 flex-wrap">
-            <button onclick="setTab('all')" class="tab-btn px-3 py-1 rounded bg-blue-100 text-blue-600">All Users</button>
-            <button onclick="setTab('veterinarian')" class="tab-btn px-3 py-1 rounded">Veterinarians</button>
-            <button onclick="setTab('client')" class="tab-btn px-3 py-1 rounded">Clients</button>
-            <button onclick="setTab('intern')" class="tab-btn px-3 py-1 rounded">Interns</button>
-            <button onclick="setTab('administrator')" class="tab-btn px-3 py-1 rounded">Administrators</button>
+            <button data-tab="all" class="tab-btn px-3 py-1 rounded bg-blue-100 text-blue-600">All Users</button>
+            <button data-tab="veterinarian" class="tab-btn px-3 py-1 rounded">Veterinarians</button>
+            <button data-tab="client" class="tab-btn px-3 py-1 rounded">Clients</button>
+            <button data-tab="intern" class="tab-btn px-3 py-1 rounded">Interns</button>
+            <button data-tab="administrator" class="tab-btn px-3 py-1 rounded">Administrators</button>
           </div>
           <div class="relative">
             <input id="searchInput" type="text" placeholder="Search users..." class="pl-8 pr-4 py-2 border rounded w-64">
