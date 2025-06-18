@@ -1,4 +1,4 @@
-
+function initComponent() {
     const appointments = [
       { id: "1", date: "2025-05-20", time: "10:00 AM", client: "John Doe", pet: "Max (Dog)", petType: "Golden Retriever, 5 years", service: "Vaccination", doctor: "Dr. Sarah Johnson", status: "confirmed" },
       { id: "2", date: "2025-05-20", time: "11:30 AM", client: "Sarah Smith", pet: "Bella (Cat)", petType: "Siamese, 3 years", service: "Check-up", doctor: "Dr. Michael Chen", status: "confirmed" },
@@ -79,3 +79,4 @@
     getUniqueDoctors();
     [dateInput, statusSelect, doctorSelect, searchInput].forEach(el => el.addEventListener("input", renderAppointments));
     renderAppointments();
+  }
