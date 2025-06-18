@@ -34,22 +34,21 @@ routes.forEach(route => {
   sidebar.appendChild(link);
 });
 
-function loadScript(scriptUrl) {
-  const oldScript = document.querySelector("#dynamic-script");
-  if (oldScript) oldScript.remove();
-
-  const script = document.createElement("script");
-  script.src = scriptUrl;
-  script.id = "dynamic-script";
-  script.onload = () => {
-    // Aquí podrías opcionalmente ejecutar una función global si la defines en cada módulo
-    if (typeof initComponent === "function") {
-      initComponent(); // debe estar definida en services.js por ejemplo
-    }
-  };
-  document.body.appendChild(script);
+function loadComponent(file, scriptFile) {
+  fetch(`./componentes/${file}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Error al cargar componente");
+      return res.text();
+    })
+    .then(html => {
+      main.innerHTML = html;
+      lucide.createIcons();
+      if (scriptFile) loadScript(`./componentes/${scriptFile}`);
+    })
+    .catch(() => {
+      main.innerHTML = `<div class="p-4 bg-red-100 text-red-800 rounded">No se pudo cargar el componente <strong>${file}</strong>.</div>`;
+    });
 }
-
 
 function setActiveLink(activeElement) {
   document.querySelectorAll("#sidebar-links a").forEach(link => {
