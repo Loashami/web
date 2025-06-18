@@ -1,4 +1,4 @@
-
+function initComponent() {
     const inventory = [
       { id: 1, name: "Rabies Vaccine", category: "Vaccines", quantity: 45, unit: "doses", reorderLevel: 20, expiryDate: "2026-05-20", supplier: "VetMed Supplies", status: "in_stock" },
       { id: 2, name: "Flea & Tick Medication", category: "Medications", quantity: 32, unit: "packages", reorderLevel: 15, expiryDate: "2026-08-15", supplier: "PetPharm", status: "in_stock" },
@@ -94,3 +94,4 @@
     // Mostrar la tabla al cargar
     populateTable();
   });
+}
