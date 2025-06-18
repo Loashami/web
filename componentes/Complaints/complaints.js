@@ -1,4 +1,4 @@
-
+function initComponent() {
     const complaints = [
       { id: "1", date: "2025-05-18", client: "John Doe", subject: "Long wait time", description: "Waited 45 mins.", status: "pending", priority: "medium", assignedTo: "Robert Wilson" },
       { id: "2", date: "2025-05-17", client: "Sarah Smith", subject: "Billing discrepancy", description: "Charged incorrectly.", status: "in-progress", priority: "high", assignedTo: "Robert Wilson" },
@@ -60,3 +60,4 @@
     priorityFilter.addEventListener("change", renderComplaints);
 
     renderComplaints();
+  }
