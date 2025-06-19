@@ -10,7 +10,6 @@ const routes = [
   { name: "Complaints", href: "#/admin/complaints", file: "Complaints/complaints.html", script: "Complaints/complaints.js", icon: "book-open" },
   { name: "Reports", href: "#/admin/reports", file: "Reports/reports.html", script: "Reports/reports.js", icon: "file-text" },
   { name: "Payments", href: "#/admin/payments", file: "Payments/payments.html", script: "Payments/payments.js", icon: "dollar-sign" },
-  { name: "Inventory", href: "#/admin/inventory", file: "Inventory/inventory.html", script: "Inventory/inventory.js", icon: "package" },
 ];
 
 const sidebar = document.getElementById("sidebar-links");
