@@ -1,146 +1,90 @@
-function initComponent() {
-window.onload = function () {
-  // Datos simulados
-  const mockStats = {
-    revenue: '$24,560',
-    apps: 182,
-    clients: 28,
-    cancels: 12,
-  };
+document.addEventListener("DOMContentLoaded", () => {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabSections = document.querySelectorAll('.tab-section');
 
-  const mockRecent = [
-    { title: 'Monthly Financial Report', date: 'April 2025' },
-    { title: 'Quarterly Business Review', date: 'Q1 2025' },
-    { title: 'Staff Performance Analysis', date: 'March 2025' },
-    { title: 'Client Satisfaction Survey', date: 'February 2025' },
-  ];
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          tabButtons.forEach(btn => btn.classList.remove('text-blue-600', 'font-medium'));
+          button.classList.add('text-blue-600', 'font-medium');
 
-  // Render estadísticos
-  document.getElementById('revenueValue').textContent = mockStats.revenue;
-  document.getElementById('appsValue').textContent = mockStats.apps;
-  document.getElementById('clientsValue').textContent = mockStats.clients;
-  document.getElementById('cancelsValue').textContent = mockStats.cancels;
+          const tab = button.getAttribute('data-tab');
+          tabSections.forEach(section => {
+            section.classList.toggle('hidden', section.id !== 'tab-' + tab);
+          });
+        });
+      });
 
-  const recentReports = document.getElementById('recentReports');
-  mockRecent.forEach(r => {
-    recentReports.innerHTML += `
-      <div class="flex items-center justify-between border rounded p-3">
-        <div><strong>${r.title}</strong><br><small>${r.date}</small></div>
-        <button class="border rounded px-3 py-1">Download</button>
-      </div>`;
-  });
+      new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Revenue ($)',
+            data: [12000, 15000, 18000, 22000, 20000, 24560],
+            borderColor: 'rgb(59, 130, 246)',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
 
-  // Tabs
-  const tabBtns = document.querySelectorAll('.tabBtn');
-  const tabContents = document.querySelectorAll('.tabContent');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach(b => b.classList.remove('bg-gray-200'));
-      tabContents.forEach(c => c.classList.add('hidden'));
-      btn.classList.add('bg-gray-200');
-      document.getElementById(btn.dataset.tab).classList.remove('hidden');
+      new Chart(document.getElementById('appointmentsChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [
+            {
+              label: 'Scheduled',
+              data: [12, 15, 10, 8],
+              backgroundColor: 'rgba(96, 165, 250, 0.8)'
+            },
+            {
+              label: 'Completed',
+              data: [10, 14, 8, 6],
+              backgroundColor: 'rgba(34, 197, 94, 0.8)'
+            },
+            {
+              label: 'Cancelled',
+              data: [2, 1, 2, 2],
+              backgroundColor: 'rgba(239, 68, 68, 0.8)'
+            }
+          ]
+        },
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
+
+      new Chart(document.getElementById('servicesChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Vaccinations', 'Check-ups', 'Dental Cleaning', 'Surgery', 'Emergency Care', 'Grooming'],
+          datasets: [{
+            data: [35, 25, 15, 10, 8, 7],
+            backgroundColor: [
+              '#60A5FA', '#5EEAD4', '#C084FC', '#FB7185', '#FBBF24', '#FDE68A'
+            ]
+          }]
+        },
+        options: { responsive: true }
+      });
+
+      new Chart(document.getElementById('staffChart'), {
+        type: 'radar',
+        data: {
+          labels: ['Efficiency', 'Satisfaction', 'Punctuality', 'Teamwork', 'Skill'],
+          datasets: [{
+            label: 'Staff A',
+            data: [90, 85, 80, 75, 95],
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: 'rgb(59, 130, 246)'
+          }]
+        },
+        options: { responsive: true, scales: { r: { beginAtZero: true } } }
+      });
+
+      document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent === 'Print') btn.onclick = () => window.print();
+        if (btn.textContent === 'Export') btn.onclick = () => alert('Export feature coming soon!');
+      });
     });
-  });
-  tabBtns[0].click(); // Activa el primero por defecto
-
-// Chart: Appointments
-const appsCtx = document.getElementById('appointmentsChart').getContext('2d');
-new Chart(appsCtx, {
-  type: 'line',
-  data: {
-    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-    datasets: [{
-      label: 'Appointments',
-      data: [45, 50, 40, 47],
-      backgroundColor: 'rgba(34, 197, 94, 0.5)',
-      borderColor: 'rgba(34, 197, 94, 1)',
-      borderWidth: 2,
-      fill: true,
-      tension: 0.3
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: { y: { beginAtZero: true } }
-  }
-});
-
- // Chart.js
-  const ctx = document.getElementById('revenueChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-      datasets: [{
-        label: 'Revenue',
-        data: [4000, 6000, 5500, 9000],
-        backgroundColor: 'rgba(59, 130, 246, 0.5)',
-        borderColor: 'rgba(59, 130, 246, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-// Chart: Services
-const servicesCtx = document.getElementById('servicesChart').getContext('2d');
-new Chart(servicesCtx, {
-  type: 'pie',
-  data: {
-    labels: ['Consultations', 'Vaccinations', 'Grooming'],
-    datasets: [{
-      label: 'Services',
-      data: [80, 45, 25],
-      backgroundColor: [
-        'rgba(59, 130, 246, 0.6)',
-        'rgba(251, 191, 36, 0.6)',
-        'rgba(239, 68, 68, 0.6)'
-      ],
-      borderColor: [
-        'rgba(59, 130, 246, 1)',
-        'rgba(251, 191, 36, 1)',
-        'rgba(239, 68, 68, 1)'
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true
-  }
-});
-
-// Chart: Staff
-const staffCtx = document.getElementById('staffChart').getContext('2d');
-new Chart(staffCtx, {
-  type: 'radar',
-  data: {
-    labels: ['Efficiency', 'Punctuality', 'Client Feedback', 'Skills', 'Teamwork'],
-    datasets: [{
-      label: 'Staff Performance',
-      data: [80, 75, 90, 85, 88],
-      backgroundColor: 'rgba(96, 165, 250, 0.2)',
-      borderColor: 'rgba(96, 165, 250, 1)',
-      borderWidth: 2
-    }]
-  },
-  options: {
-    responsive: true,
-    scales: {
-      r: { beginAtZero: true }
-    }
-  }
-});
-
-
-  // Print/export
-  document.getElementById('printBtn').addEventListener('click', () => window.print());
-  document.getElementById('exportBtn').addEventListener('click', () => alert('Exportando datos...'));
-};
-}
