@@ -23,8 +23,8 @@
               <option>Yearly</option>
             </select>
             <input type="month" class="border rounded px-3 py-2" />
-            <button class="border rounded px-3 py-2" onclick="window.print()">Print</button>
-            <button class="border rounded px-3 py-2" onclick="alert('Export functionality coming soon')">Export</button>
+            <button class="border rounded px-3 py-2">Print</button>
+            <button class="border rounded px-3 py-2">Export</button>
           </div>
         </div>
 
@@ -56,7 +56,7 @@
           </div>
         </div>
 
-        <!-- Chart Tabs -->
+        <!-- Tabs -->
         <div class="mt-10 bg-white p-4 rounded shadow">
           <div class="flex space-x-4">
             <button class="tab-btn text-blue-600 font-medium" data-tab="revenue">Revenue</button>
@@ -66,10 +66,11 @@
           </div>
         </div>
 
-        <!-- Charts -->
+        <!-- Chart Sections -->
         <div id="tab-revenue" class="tab-section block">
           <div class="mt-8 bg-white p-6 rounded shadow">
             <h3 class="text-xl font-bold mb-2">Revenue Overview</h3>
+            <p class="text-gray-500 mb-4">Financial performance for June 2025</p>
             <canvas id="revenueChart" class="h-80 w-full"></canvas>
           </div>
         </div>
@@ -77,13 +78,15 @@
         <div id="tab-appointments" class="tab-section hidden">
           <div class="mt-8 bg-white p-6 rounded shadow">
             <h3 class="text-xl font-bold mb-2">Appointments Overview</h3>
+            <p class="text-gray-500 mb-4">Distribution of appointments for June 2025</p>
             <canvas id="appointmentsChart" class="h-80 w-full"></canvas>
           </div>
         </div>
 
         <div id="tab-services" class="tab-section hidden">
           <div class="mt-8 bg-white p-6 rounded shadow">
-            <h3 class="text-xl font-bold mb-2">Services Overview</h3>
+            <h3 class="text-xl font-bold mb-2">Services Provided</h3>
+            <p class="text-gray-500 mb-4">Breakdown of services for June 2025</p>
             <canvas id="servicesChart" class="h-80 w-full"></canvas>
           </div>
         </div>
@@ -91,12 +94,14 @@
         <div id="tab-staff" class="tab-section hidden">
           <div class="mt-8 bg-white p-6 rounded shadow">
             <h3 class="text-xl font-bold mb-2">Staff Performance</h3>
+            <p class="text-gray-500 mb-4">Performance metrics for June 2025</p>
             <canvas id="staffChart" class="h-80 w-full"></canvas>
           </div>
         </div>
+
       </div>
     </main>
   </div>
-    <script src="reports.js"></script>
-  </body>
+<script src="reports.js"></script>
+</body>
 </html>
