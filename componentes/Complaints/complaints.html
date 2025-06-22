@@ -1,18 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complaints Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fade-in {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-fade-in { animation: fade-in 0.2s ease-out forwards; }
 
+    .toast {
+      animation: fade-in 0.3s ease-out, fade-out 0.3s ease-in 2.5s forwards;
+    }
+    @keyframes fade-out {
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+
+    body.modal-open { overflow: hidden; }
+  </style>
+</head>
 <body class="bg-gray-100">
   <div class="flex min-h-screen">
     <main class="flex-1 p-6">
-      <h1 class="mb-6 text-3xl font-bold">Complaints Management</h1>
+      <h1 class="mb-6 text-3xl font-bold text-gray-800">Complaints Management</h1>
 
-      <div class="flex flex-wrap gap-4 mb-6">
-        <select id="statusFilter" class="border rounded p-2 w-40">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:gap-4 mb-6 gap-2">
+        <select id="statusFilter" class="border rounded-md p-2 w-full sm:w-44 bg-white">
           <option value="all">All Statuses</option>
           <option value="pending">Pending</option>
           <option value="in-progress">In Progress</option>
           <option value="resolved">Resolved</option>
+          <option value="completed">Completed</option>
         </select>
 
-        <select id="priorityFilter" class="border rounded p-2 w-40">
+        <select id="priorityFilter" class="border rounded-md p-2 w-full sm:w-44 bg-white">
           <option value="all">All Priorities</option>
           <option value="low">Low</option>
           <option value="medium">Medium</option>
@@ -20,40 +44,186 @@
           <option value="critical">Critical</option>
         </select>
 
-        <input id="searchInput" type="text" placeholder="Search complaints..." class="border rounded p-2 flex-1">
+        <input id="searchInput" type="text" placeholder="Search complaints..." class="border rounded-md p-2 w-full flex-1">
       </div>
 
-      <div class="overflow-x-auto border rounded-md">
-        <table class="min-w-full text-sm text-left">
-          <thead class="bg-gray-200">
+      <div class="overflow-x-auto border rounded-md bg-white">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider">
             <tr>
-              <th class="p-3">Date</th>
-              <th class="p-3">Client</th>
-              <th class="p-3">Subject</th>
-              <th class="p-3">Priority</th>
-              <th class="p-3">Status</th>
-              <th class="p-3">Assigned To</th>
-              <th class="p-3">Actions</th>
+              <th class="p-3 text-left">Date</th>
+              <th class="p-3 text-left">Client</th>
+              <th class="p-3 text-left">Subject</th>
+              <th class="p-3 text-left">Priority</th>
+              <th class="p-3 text-left">Status</th>
+              <th class="p-3 text-left">Assigned To</th>
+              <th class="p-3 text-left">Actions</th>
             </tr>
           </thead>
-          <tbody id="complaintsBody" class="bg-white"></tbody>
+          <tbody id="complaintsBody" class="bg-white divide-y divide-gray-200"></tbody>
         </table>
       </div>
+
+      <p id="resultCount" class="text-sm text-gray-600 mt-4"></p>
     </main>
   </div>
 
   <!-- Modal -->
   <div id="complaintModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg p-6 w-full max-w-xl max-h-[80vh] overflow-y-auto">
-      <h2 class="text-xl font-bold mb-2">Complaint Details</h2>
-      <div id="modalContent" class="space-y-2"></div>
-      <textarea placeholder="Enter your response..." class="w-full mt-4 p-2 border rounded"></textarea>
-      <div class="flex justify-end gap-2 mt-4">
+    <div id="modalBox" class="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl max-h-[80vh] overflow-y-auto animate-fade-in">
+      <h2 class="text-xl font-bold mb-2 text-gray-800">Complaint Details</h2>
+      <div id="modalContent" class="space-y-2 text-sm text-gray-700"></div>
+      <textarea id="responseText" placeholder="Enter your response..." class="w-full mt-4 p-2 border rounded-md hidden"></textarea>
+      <div id="modalActions" class="flex justify-end gap-2 mt-4 hidden">
         <button onclick="closeModal()" class="px-4 py-2 border rounded hover:bg-gray-100">Cancel</button>
-        <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Resolve & Send Response</button>
+        <button onclick="markAsCompleted()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Resolve & Send Response</button>
       </div>
     </div>
   </div>
-  <script src="complaints.js"></script>
+
+  <!-- Toast -->
+  <div id="toastContainer" class="fixed top-6 right-6 space-y-2 z-[1000]"></div>
+
+  <script>
+    let complaints = JSON.parse(localStorage.getItem("complaints")) || [
+      { id: "1", date: "2025-05-18", client: "John Doe", subject: "Long wait time", description: "Waited 45 mins.", status: "pending", priority: "medium", assignedTo: "Robert Wilson" },
+      { id: "2", date: "2025-05-17", client: "Sarah Smith", subject: "Billing discrepancy", description: "Charged incorrectly.", status: "in-progress", priority: "high", assignedTo: "Robert Wilson" },
+      { id: "3", date: "2025-05-15", client: "Michael Johnson", subject: "Rude staff", description: "Receptionist rude.", status: "resolved", priority: "medium", assignedTo: "Lisa Patel", response: "We apologize. The staff has been reminded about professional behavior." },
+      { id: "4", date: "2025-05-14", client: "Emily Davis", subject: "Incorrect medication", description: "Wrong prescription.", status: "in-progress", priority: "critical", assignedTo: "Robert Wilson" },
+      { id: "5", date: "2025-05-12", client: "David Wilson", subject: "Cleanliness concerns", description: "Room was dirty.", status: "completed", priority: "low", assignedTo: "Lisa Patel", response: "Thank you. We’ve addressed the issue with our cleaning staff." }
+    ];
+
+    let selectedComplaint = null;
+    const body = document.getElementById("complaintsBody");
+    const searchInput = document.getElementById("searchInput");
+    const statusFilter = document.getElementById("statusFilter");
+    const priorityFilter = document.getElementById("priorityFilter");
+
+    function getStatusColor(status) {
+      switch (status) {
+        case "pending": return "bg-yellow-100 text-yellow-800";
+        case "in-progress": return "bg-blue-100 text-blue-800";
+        case "resolved": return "bg-green-100 text-green-800";
+        case "completed": return "bg-gray-200 text-gray-800";
+        default: return "bg-gray-100 text-gray-700";
+      }
+    }
+
+    function renderComplaints() {
+      const search = searchInput.value.toLowerCase();
+      const status = statusFilter.value;
+      const priority = priorityFilter.value;
+
+      const filtered = complaints.filter(c => {
+        const matchesStatus = status === "all" || c.status === status;
+        const matchesPriority = priority === "all" || c.priority === priority;
+        const matchesSearch = c.client.toLowerCase().includes(search) || c.subject.toLowerCase().includes(search);
+        return matchesStatus && matchesPriority && matchesSearch;
+      });
+
+      body.innerHTML = filtered.map(c => `
+        <tr class="hover:bg-gray-50">
+          <td class="p-3">${new Date(c.date).toLocaleDateString()}</td>
+          <td class="p-3 font-medium">${c.client}</td>
+          <td class="p-3 truncate max-w-[200px]">${c.subject}</td>
+          <td class="p-3 capitalize">${c.priority}</td>
+          <td class="p-3">
+            <span class="px-2 py-1 rounded text-xs font-semibold ${getStatusColor(c.status)}">
+              ${c.status.replace("-", " ")}
+            </span>
+          </td>
+          <td class="p-3">${c.assignedTo}</td>
+          <td class="p-3">
+            <button data-id="${c.id}" class="view-btn px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">View</button>
+          </td>
+        </tr>
+      `).join("");
+
+      document.querySelectorAll(".view-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const id = e.currentTarget.dataset.id;
+          const complaint = complaints.find(c => c.id === id);
+          if (complaint) showModal(complaint);
+        });
+      });
+    }
+
+    function showModal(complaint) {
+      selectedComplaint = complaint;
+      document.getElementById("complaintModal").classList.remove("hidden");
+      document.body.classList.add("modal-open");
+
+      const content = document.getElementById("modalContent");
+      const responseInput = document.getElementById("responseText");
+      const actions = document.getElementById("modalActions");
+
+      content.innerHTML = `
+        <p><strong>Client:</strong> ${complaint.client}</p>
+        <p><strong>Status:</strong> ${complaint.status}</p>
+        <p><strong>Priority:</strong> ${complaint.priority}</p>
+        <p><strong>Assigned To:</strong> ${complaint.assignedTo}</p>
+        <p><strong>Subject:</strong> ${complaint.subject}</p>
+        <p><strong>Description:</strong> ${complaint.description}</p>
+        ${complaint.response ? `<div class="bg-gray-100 p-3 rounded text-sm"><strong>Response:</strong> ${complaint.response}</div>` : ""}
+      `;
+
+      if (complaint.status === "resolved" || complaint.status === "completed") {
+        responseInput.classList.add("hidden");
+        actions.classList.add("hidden");
+      } else {
+        responseInput.classList.remove("hidden");
+        actions.classList.remove("hidden");
+        responseInput.value = complaint.response || "";
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("complaintModal").classList.add("hidden");
+      document.body.classList.remove("modal-open");
+    }
+
+    function markAsCompleted() {
+      const response = document.getElementById("responseText").value.trim();
+      if (selectedComplaint) {
+        selectedComplaint.status = "completed";
+        if (response) selectedComplaint.response = response;
+        localStorage.setItem("complaints", JSON.stringify(complaints));
+        renderComplaints();
+        closeModal();
+        showToast("Complaint marked as completed!");
+      }
+    }
+
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "toast px-4 py-2 bg-green-600 text-white rounded shadow";
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    document.addEventListener("click", function (e) {
+      const modal = document.getElementById("complaintModal");
+      const box = document.getElementById("modalBox");
+
+      // ✅ Evita cerrar si se hace clic en el botón View
+      if (e.target.closest(".view-btn")) return;
+
+      if (!modal.classList.contains("hidden") && !box.contains(e.target)) {
+        closeModal();
+      }
+    });
+
+    searchInput.addEventListener("input", renderComplaints);
+    statusFilter.addEventListener("change", renderComplaints);
+    priorityFilter.addEventListener("change", renderComplaints);
+
+    document.addEventListener("DOMContentLoaded", renderComplaints);
+  </script>
 </body>
 </html>
