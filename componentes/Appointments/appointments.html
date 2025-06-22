@@ -7,9 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen text-gray-800">
   <div class="flex">
-
     <!-- Main Content -->
     <main class="flex-1 p-6">
       <div class="container mx-auto">
@@ -54,14 +53,41 @@
                   <th class="p-4 text-left">Actions</th>
                 </tr>
               </thead>
-              <tbody id="appointment-body">
-              </tbody>
+              <tbody id="appointment-body"></tbody>
             </table>
           </div>
         </div>
       </div>
     </main>
   </div>
+
+  <!-- Edit Modal -->
+  <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <h3 class="text-xl font-bold mb-4">Edit Appointment</h3>
+      <form id="edit-form" class="space-y-4">
+        <input type="hidden" id="edit-id" />
+        <div>
+          <label class="block text-sm font-medium">Client</label>
+          <input id="edit-client" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Pet</label>
+          <input id="edit-pet" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Service</label>
+          <input id="edit-service" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+        <div class="flex justify-end gap-3 mt-4">
+          <button type="button" id="cancel-edit" class="px-4 py-2 text-sm rounded border text-gray-600 hover:bg-gray-100 transition">Cancel</button>
+          <button type="submit" class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
   <script src="appointments.js"></script>
 </body>
 </html>
