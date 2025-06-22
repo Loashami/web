@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+function initComponent() {
       const tabButtons = document.querySelectorAll('.tab-btn');
       const tabSections = document.querySelectorAll('.tab-section');
 
@@ -87,4 +87,4 @@ document.addEventListener("DOMContentLoaded", () => {
         if (btn.textContent === 'Print') btn.onclick = () => window.print();
         if (btn.textContent === 'Export') btn.onclick = () => alert('Export feature coming soon!');
       });
-    });
+    };
