@@ -4,13 +4,12 @@ const currentPath = window.location.pathname;
 
 const routes = [
   { name: "Dashboard", href: "#/admin/dashboard", file: "Dashboard/dashboard.html", script: "Dashboard/dashboard.js", icon: "layout-dashboard" },
-  { name: "Users", href: "#/admin/users", file: "Users/users.html", script: "Users/users.js", icon: "users" },
-  { name: "Services", href: "#/admin/services", file: "Services/services.html", script: "Services/services.js", icon: "settings" },
-  { name: "Appointments", href: "#/admin/appointments", file: "Appointments/appointments.html", script: "Appointments/appointments.js", icon: "calendar" },
-  { name: "Complaints", href: "#/admin/complaints", file: "Complaints/complaints.html", script: "Complaints/complaints.js", icon: "book-open" },
-  { name: "Reports", href: "#/admin/reports", file: "Reports/reports.html", script: "Reports/reports.js", icon: "file-text" },
-  { name: "Payments", href: "#/admin/payments", file: "Payments/payments.html", script: "Payments/payments.js", icon: "dollar-sign" },
-  { name: "Inventory", href: "#/admin/inventory", file: "Inventory/inventory.html", script: "Inventory/inventory.js", icon: "package" },
+  { name: "Usuarios", href: "#/admin/users", file: "Users/users.html", script: "Users/users.js", icon: "users" },
+  { name: "Servicios", href: "#/admin/services", file: "Services/services.html", script: "Services/services.js", icon: "settings" },
+  { name: "Citas", href: "#/admin/appointments", file: "Appointments/appointments.html", script: "Appointments/appointments.js", icon: "calendar" },
+  { name: "Quejas", href: "#/admin/complaints", file: "Complaints/complaints.html", script: "Complaints/complaints.js", icon: "book-open" },
+  { name: "Reportes", href: "#/admin/reports", file: "Reports/reports.html", script: "Reports/reports.js", icon: "file-text" },
+  { name: "Pagos", href: "#/admin/payments", file: "Payments/payments.html", script: "Payments/payments.js", icon: "dollar-sign" },
 ];
 
 const sidebar = document.getElementById("sidebar-links");
