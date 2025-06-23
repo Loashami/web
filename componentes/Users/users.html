@@ -11,16 +11,16 @@
     <div class="container mx-auto">
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Users Management</h1>
-        <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Add new User</button>
+        <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Nuevo Usuario</button>
       </div>
 
       <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
         <div class="flex gap-2 flex-wrap">
-          <button data-tab="all" class="tab-btn px-3 py-1 rounded bg-blue-100 text-blue-600">All Users</button>
-          <button data-tab="veterinarian" class="tab-btn px-3 py-1 rounded">Veterinarians</button>
-          <button data-tab="client" class="tab-btn px-3 py-1 rounded">Clients</button>
-          <button data-tab="intern" class="tab-btn px-3 py-1 rounded">Interns</button>
-          <button data-tab="administrator" class="tab-btn px-3 py-1 rounded">Administrators</button>
+          <button data-tab="all" class="tab-btn px-3 py-1 rounded bg-blue-100 text-blue-600">Todos los Usuarios</button>
+          <button data-tab="veterinarian" class="tab-btn px-3 py-1 rounded">Veterinarios</button>
+          <button data-tab="client" class="tab-btn px-3 py-1 rounded">Clientes</button>
+          <button data-tab="intern" class="tab-btn px-3 py-1 rounded">Internos</button>
+          <button data-tab="administrator" class="tab-btn px-3 py-1 rounded">Administrador</button>
         </div>
         <div class="relative">
           <input id="searchInput" type="text" placeholder="Search users..." class="pl-8 pr-4 py-2 border rounded w-64">
@@ -34,13 +34,13 @@
         <table class="w-full text-sm">
           <thead class="bg-gray-200">
             <tr>
-              <th class="p-3 text-left">Name</th>
+              <th class="p-3 text-left">Nombre</th>
               <th class="p-3 text-left">Email</th>
-              <th class="p-3 text-left">Role</th>
-              <th class="p-3 text-left">Details</th>
-              <th class="p-3 text-left">Status</th>
-              <th class="p-3 text-left">Last Active</th>
-              <th class="p-3 text-left">Actions</th>
+              <th class="p-3 text-left">Rol</th>
+              <th class="p-3 text-left">Detalles</th>
+              <th class="p-3 text-left">Estado</th>
+              <th class="p-3 text-left">Ultimo activo</th>
+              <th class="p-3 text-left">Accion</th>
             </tr>
           </thead>
           <tbody id="usersTableBody"></tbody>
@@ -52,11 +52,11 @@
   <!-- Modal -->
   <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 items-center justify-center">
     <div class="bg-white rounded-lg p-6 w-full max-w-md mx-auto">
-      <h2 class="text-xl font-bold mb-4" id="modalTitle">Add New User</h2>
+      <h2 class="text-xl font-bold mb-4" id="modalTitle">Agregar Nuevo Usuario</h2>
       <form id="userForm" class="space-y-4">
         <input type="hidden" id="editUserId">
         <div>
-          <label class="block text-sm font-medium">Name</label>
+          <label class="block text-sm font-medium">Nombre</label>
           <input type="text" id="userName" required class="w-full border rounded px-3 py-2 mt-1">
         </div>
         <div>
@@ -64,13 +64,13 @@
           <input type="email" id="userEmail" required class="w-full border rounded px-3 py-2 mt-1">
         </div>
         <div>
-          <label class="block text-sm font-medium">Role</label>
+          <label class="block text-sm font-medium">Rol</label>
           <select id="userRole" required class="w-full border rounded px-3 py-2 mt-1">
-            <option value="">Select role</option>
-            <option value="veterinarian">Veterinarian</option>
-            <option value="client">Client</option>
-            <option value="intern">Intern</option>
-            <option value="administrator">Administrator</option>
+            <option value="">Seleccionar rol</option>
+            <option value="veterinarian">Veterinario</option>
+            <option value="client">Cliente</option>
+            <option value="intern">Interno</option>
+            <option value="administrator">Administrador</option>
           </select>
         </div>
         <div class="flex justify-end gap-2">
