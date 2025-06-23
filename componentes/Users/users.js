@@ -1,13 +1,13 @@
 function initComponent() {
   const users = [
-    { id: 1, name: "Dr. Sarah Johnson", email: "sarah.johnson@vetclinic.com", role: "veterinarian", specialty: "General Practice", status: "active", lastActive: "2025-05-19T14:30:00" },
-    { id: 2, name: "Dr. Michael Chen", email: "michael.chen@vetclinic.com", role: "veterinarian", specialty: "Surgery", status: "active", lastActive: "2025-05-19T10:15:00" },
-    { id: 3, name: "John Doe", email: "john.doe@example.com", role: "client", pets: ["Max (Dog)", "Bella (Cat)"], status: "active", lastActive: "2025-05-18T16:45:00" },
-    { id: 4, name: "Sarah Smith", email: "sarah.smith@example.com", role: "client", pets: ["Rocky (Dog)"], status: "active", lastActive: "2025-05-17T09:20:00" },
-    { id: 5, name: "Alex Rodriguez", email: "alex.rodriguez@vetclinic.com", role: "intern", supervisor: "Dr. Sarah Johnson", status: "active", lastActive: "2025-05-19T11:30:00" },
-    { id: 6, name: "Jessica Taylor", email: "jessica.taylor@vetclinic.com", role: "intern", supervisor: "Dr. Michael Chen", status: "active", lastActive: "2025-05-19T13:10:00" },
-    { id: 7, name: "Robert Wilson", email: "robert.wilson@vetclinic.com", role: "administrator", status: "active", lastActive: "2025-05-19T15:45:00" },
-    { id: 8, name: "Emily Davis", email: "emily.davis@example.com", role: "client", pets: ["Luna (Cat)"], status: "inactive", lastActive: "2025-04-30T14:20:00" }
+    { id: 1, name: "Dr. Sarah Johnson", email: "sarah.johnson@vetclinic.com", role: "veterinario", specialty: "General Practice", status: "active", lastActive: "2025-05-19T14:30:00" },
+    { id: 2, name: "Dr. Michael Chen", email: "michael.chen@vetclinic.com", role: "veterinario", specialty: "Surgery", status: "active", lastActive: "2025-05-19T10:15:00" },
+    { id: 3, name: "John Doe", email: "john.doe@example.com", role: "cliente", pets: ["Max (Dog)", "Bella (Cat)"], status: "active", lastActive: "2025-05-18T16:45:00" },
+    { id: 4, name: "Sarah Smith", email: "sarah.smith@example.com", role: "cliente", pets: ["Rocky (Dog)"], status: "active", lastActive: "2025-05-17T09:20:00" },
+    { id: 5, name: "Alex Rodriguez", email: "alex.rodriguez@vetclinic.com", role: "interno", supervisor: "Dr. Sarah Johnson", status: "active", lastActive: "2025-05-19T11:30:00" },
+    { id: 6, name: "Jessica Taylor", email: "jessica.taylor@vetclinic.com", role: "interno", supervisor: "Dr. Michael Chen", status: "active", lastActive: "2025-05-19T13:10:00" },
+    { id: 7, name: "Robert Wilson", email: "robert.wilson@vetclinic.com", role: "administrador", status: "active", lastActive: "2025-05-19T15:45:00" },
+    { id: 8, name: "Emily Davis", email: "emily.davis@example.com", role: "cliente", pets: ["Luna (Cat)"], status: "inactive", lastActive: "2025-04-30T14:20:00" }
   ];
   let activeTab = "all";
 
