@@ -1,4 +1,3 @@
-
   let complaints = [];
   let selectedComplaint = null;
 
@@ -101,20 +100,27 @@
   function showToast(message) {
     const container = document.getElementById("toastContainer");
     const toast = document.createElement("div");
-    toast.className = "toast px-4 py-2 bg-green-600 text-white rounded shadow";
+    toast.className = "toast px-4 py-2 bg-green-600 text-white rounded shadow my-2";
     toast.textContent = message;
     container.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
   }
 
   function initComponent() {
-    complaints = JSON.parse(localStorage.getItem("complaints")) || [
-      { id: "1", date: "2025-05-18", client: "John Doe", subject: "Long wait time", description: "Waited 45 mins.", status: "pending", priority: "medium", assignedTo: "Robert Wilson" },
-      { id: "2", date: "2025-05-17", client: "Sarah Smith", subject: "Billing discrepancy", description: "Charged incorrectly.", status: "in-progress", priority: "high", assignedTo: "Robert Wilson" },
-      { id: "3", date: "2025-05-15", client: "Michael Johnson", subject: "Rude staff", description: "Receptionist rude.", status: "resolved", priority: "medium", assignedTo: "Lisa Patel", response: "We apologize. The staff has been reminded about professional behavior." },
-      { id: "4", date: "2025-05-14", client: "Emily Davis", subject: "Incorrect medication", description: "Wrong prescription.", status: "in-progress", priority: "critical", assignedTo: "Robert Wilson" },
-      { id: "5", date: "2025-05-12", client: "David Wilson", subject: "Cleanliness concerns", description: "Room was dirty.", status: "completed", priority: "low", assignedTo: "Lisa Patel", response: "Thank you. We’ve addressed the issue with our cleaning staff." }
-    ];
+    const existing = localStorage.getItem("complaints");
+
+    if (existing) {
+      complaints = JSON.parse(existing);
+    } else {
+      complaints = [
+        { id: "1", date: "2025-05-18", client: "John Doe", subject: "Long wait time", description: "Waited 45 mins.", status: "pending", priority: "medium", assignedTo: "Robert Wilson" },
+        { id: "2", date: "2025-05-17", client: "Sarah Smith", subject: "Billing discrepancy", description: "Charged incorrectly.", status: "in-progress", priority: "high", assignedTo: "Robert Wilson" },
+        { id: "3", date: "2025-05-15", client: "Michael Johnson", subject: "Rude staff", description: "Receptionist rude.", status: "resolved", priority: "medium", assignedTo: "Lisa Patel", response: "We apologize. The staff has been reminded about professional behavior." },
+        { id: "4", date: "2025-05-14", client: "Emily Davis", subject: "Incorrect medication", description: "Wrong prescription.", status: "in-progress", priority: "critical", assignedTo: "Robert Wilson" },
+        { id: "5", date: "2025-05-12", client: "David Wilson", subject: "Cleanliness concerns", description: "Room was dirty.", status: "completed", priority: "low", assignedTo: "Lisa Patel", response: "Thank you. We’ve addressed the issue with our cleaning staff." }
+      ];
+      localStorage.setItem("complaints", JSON.stringify(complaints));
+    }
 
     document.getElementById("searchInput").addEventListener("input", renderComplaints);
     document.getElementById("statusFilter").addEventListener("change", renderComplaints);
@@ -127,9 +133,7 @@
     document.addEventListener("click", function (e) {
       const modal = document.getElementById("complaintModal");
       const box = document.getElementById("modalBox");
-
       if (e.target.closest(".view-btn")) return;
-
       if (!modal.classList.contains("hidden") && !box.contains(e.target)) {
         closeModal();
       }
