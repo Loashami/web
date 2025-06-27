@@ -1,85 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Payments Management</title>
+  <title>Gestión de Pagos</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    .badge {
-      @apply px-2 py-1 rounded text-white text-xs font-semibold;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
     }
   </style>
 </head>
-<body class="bg-gray-100">
-  <div class="flex min-h-screen">
-    <main class="flex-1 p-6">
-      <div class="container mx-auto">
-        <h1 class="mb-8 text-3xl font-bold">Payments Management</h1>
-
-        <!-- Filters -->
-        <div class="mb-6 flex flex-wrap items-center gap-4">
-          <input type="month" id="filter-date" class="border p-2 rounded" />
-
-          <select id="status-filter" class="border p-2 rounded w-[180px]">
-            <option value="all">All Statuses</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="refunded">Refunded</option>
-          </select>
-
-          <select id="method-filter" class="border p-2 rounded w-[180px]">
-            <option value="all">All Methods</option>
-            <option value="credit_card">Credit Card</option>
-            <option value="paypal">PayPal</option>
-            <option value="cash">Cash</option>
-          </select>
-
-          <div class="relative flex-1 md:max-w-xs">
-            <input type="text" id="search-query" placeholder="Search payments..." class="pl-8 border p-2 rounded w-full" />
-            <span class="material-icons absolute left-2 top-2 text-gray-400">search</span>
-          </div>
-        </div>
-
-        <!-- Summary -->
-        <div class="mb-6 p-4 bg-white rounded shadow">
-          <div class="flex items-center">
-            <span class="material-icons text-green-500 text-4xl">attach_money</span>
-            <div class="ml-4">
-              <p class="text-3xl font-bold" id="total-amount">$0.00</p>
-              <p class="text-sm text-gray-500" id="summary-date"></p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Table -->
-        <div class="bg-white rounded shadow">
-          <div class="p-4 border-b">
-            <h2 class="text-xl font-semibold">Payments List</h2>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="p-2 text-left">Date</th>
-                  <th class="p-2 text-left">Client</th>
-                  <th class="p-2 text-left">Service</th>
-                  <th class="p-2 text-left">Amount</th>
-                  <th class="p-2 text-left">Method</th>
-                  <th class="p-2 text-left">Status</th>
-                  <th class="p-2 text-left">Reference</th>
-                  <th class="p-2 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="payments-table"></tbody>
-            </table>
-          </div>
-        </div>
-
+<body class="bg-gray-50 text-gray-800">
+  <main class="p-6 min-h-screen">
+    <div class="container mx-auto">
+      <h1 class="mb-8 text-3xl font-bold">Gestión de Pagos</h1>
+      <!-- Botones de exportación -->
+      <div class="mb-6 flex gap-4">
+        <button id="btn-print" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">🖨️ Imprimir</button>
+        <button id="btn-excel" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">📊 Exportar a Excel</button>
+        <button id="btn-pdf" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">🧾 Exportar a PDF</button>
       </div>
-    </main>
+      <!-- Filtros -->
+      <div class="mb-6 flex flex-wrap items-center gap-4">
+        <input type="month" id="filter-date" class="border border-gray-300 p-2 rounded shadow-sm focus:ring-2 focus:ring-blue-400" />
+        <select id="status-filter" class="border border-gray-300 p-2 rounded w-[180px] shadow-sm focus:ring-2 focus:ring-blue-400">
+          <option value="all">Todos los estados</option>
+          <option value="completed">Completado</option>
+          <option value="pending">Pendiente</option>
+          <option value="refunded">Reembolsado</option>
+        </select>
+        <select id="method-filter" class="border border-gray-300 p-2 rounded w-[180px] shadow-sm focus:ring-2 focus:ring-blue-400">
+          <option value="all">Todos los métodos</option>
+          <option value="credit_card">Tarjeta de crédito</option>
+          <option value="paypal">PayPal</option>
+          <option value="cash">Efectivo</option>
+        </select>
+        <div class="relative flex-1 md:max-w-xs">
+          <input type="text" id="search-query" placeholder="Buscar pagos..." class="pl-10 border border-gray-300 p-2 rounded w-full shadow-sm focus:ring-2 focus:ring-blue-400" />
+          <span class="material-icons absolute left-2 top-2 text-gray-400">search</span>
+        </div>
+      </div>
+
+
+
+      <!-- Resumen -->
+      <div class="mb-6 p-4 bg-white rounded shadow flex items-center">
+        <span class="material-icons text-green-500 text-4xl">attach_money</span>
+        <div class="ml-4">
+          <p class="text-3xl font-bold" id="total-amount">S/ 0.00</p>
+          <p class="text-sm text-gray-500" id="summary-date"></p>
+        </div>
+      </div>
+
+      <!-- Tabla -->
+      <div class="bg-white rounded shadow overflow-hidden">
+        <div class="p-4 border-b bg-gray-100">
+          <h2 class="text-xl font-semibold">Lista de Pagos</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-50 text-left text-gray-600">
+              <tr>
+                <th class="p-3">Fecha</th>
+                <th class="p-3">Cliente</th>
+                <th class="p-3">Servicio</th>
+                <th class="p-3">Monto</th>
+                <th class="p-3">Método</th>
+                <th class="p-3">Estado</th>
+                <th class="p-3">Referencia</th>
+                <th class="p-3">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="payments-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="payment-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-auto p-6 relative fade-in">
+      <button id="modal-close" class="absolute top-2 right-2 text-gray-500 hover:text-red-500">
+        <span class="material-icons">close</span>
+      </button>
+      <h3 class="text-xl font-bold mb-4">Detalles del Pago</h3>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li><strong>Cliente:</strong> <span id="modal-client"></span></li>
+        <li><strong>Servicio:</strong> <span id="modal-service"></span></li>
+        <li><strong>Monto:</strong> <span id="modal-amount"></span></li>
+        <li><strong>Método:</strong> <span id="modal-method"></span></li>
+        <li><strong>Estado:</strong> <span id="modal-status"></span></li>
+        <li><strong>Referencia:</strong> <span id="modal-reference"></span></li>
+        <li><strong>Fecha:</strong> <span id="modal-date"></span></li>
+      </ul>
+    </div>
   </div>
-<script src="payments.js"></script>
+
+  <script src="payments.js"></script>
 </body>
 </html>
