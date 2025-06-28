@@ -1,4 +1,3 @@
-// appointments.data.js
 const appointments = [
   { id: "1", date: "2025-05-20", time: "10:00 AM", client: "John Doe", pet: "Max (Dog)", petType: "Golden Retriever, 5 years", service: "Vaccination", doctor: "Dr. Sarah Johnson", status: "confirmed" },
   { id: "2", date: "2025-05-20", time: "11:30 AM", client: "Sarah Smith", pet: "Bella (Cat)", petType: "Siamese, 3 years", service: "Check-up", doctor: "Dr. Michael Chen", status: "confirmed" },
@@ -11,129 +10,105 @@ const appointments = [
   { id: "9", date: "2025-05-18", time: "11:00 AM", client: "Thomas Martinez", pet: "Milo (Dog)", petType: "Labrador, 3 years", service: "Check-up", doctor: "Dr. David Kim", status: "cancelled" }
 ];
 
-// appointments.helpers.js
 function getStatusClass(status) {
-  switch (status) {
-    case "confirmed": return "bg-blue-500";
-    case "completed": return "bg-green-500";
-    case "cancelled": return "bg-red-500";
-    default: return "bg-gray-400";
-  }
+  return {
+    confirmed: "bg-blue-500",
+    completed: "bg-green-500",
+    cancelled: "bg-red-500"
+  }[status] || "bg-gray-400";
 }
 
 function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-// appointments.ui.js
-function renderAppointments(filters) {
+function getFilters() {
+  return {
+    date: document.getElementById("filter-date").value,
+    status: document.getElementById("filter-status").value,
+    doctor: document.getElementById("filter-doctor").value,
+    query: document.getElementById("search-query").value.toLowerCase()
+  };
+}
+
+function renderAppointments() {
   const tbody = document.getElementById("appointment-body");
-  const filtered = appointments.filter(a => {
-    const matchDate = filters.date ? a.date === filters.date : true;
-    const matchStatus = filters.status === "all" || a.status === filters.status;
-    const matchDoctor = filters.doctor === "all" || a.doctor === filters.doctor;
-    const matchSearch = !filters.query || a.client.toLowerCase().includes(filters.query) || a.pet.toLowerCase().includes(filters.query) || a.service.toLowerCase().includes(filters.query);
-    return matchDate && matchStatus && matchDoctor && matchSearch;
-  });
+  const { date, status, doctor, query } = getFilters();
+  const filtered = appointments.filter(a =>
+    (!date || a.date === date) &&
+    (status === "all" || a.status === status) &&
+    (doctor === "all" || a.doctor === doctor) &&
+    (!query || a.client.toLowerCase().includes(query) || a.pet.toLowerCase().includes(query) || a.service.toLowerCase().includes(query))
+  );
 
-  tbody.innerHTML = "";
-  if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-center p-4">No hay citas registradas.</td></tr>`;
-    return;
-  }
+  tbody.innerHTML = filtered.length === 0
+    ? `<tr><td colspan="7" class="text-center p-4">No hay citas registradas.</td></tr>`
+    : filtered.map(a => `
+      <tr>
+        <td class="p-4 font-medium">${a.time}</td>
+        <td class="p-4">${a.client}</td>
+        <td class="p-4">
+          <div>${a.pet}</div>
+          <div class="text-xs text-gray-500">${a.petType}</div>
+        </td>
+        <td class="p-4">${a.service}</td>
+        <td class="p-4">${a.doctor}</td>
+        <td class="p-4">
+          <span class="px-2 py-1 rounded text-white text-xs ${getStatusClass(a.status)}">${capitalize(a.status)}</span>
+        </td>
+        <td class="p-4 flex gap-2">
+          <button class="px-2 py-1 text-sm bg-blue-500 text-white rounded" onclick='openEditModal(${JSON.stringify(a)})'>Editar</button>
+          <button class="px-2 py-1 text-sm bg-red-500 text-white rounded" onclick='cancelAppointment("${a.id}")'>Eliminar</button>
+        </td>
+      </tr>
+    `).join("");
+}
 
-  for (const a of filtered) {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="p-4 font-medium">${a.time}</td>
-      <td class="p-4">${a.client}</td>
-      <td class="p-4">
-        <div>${a.pet}</div>
-        <div class="text-xs text-gray-500">${a.petType}</div>
-      </td>
-      <td class="p-4">${a.service}</td>
-      <td class="p-4">${a.doctor}</td>
-      <td class="p-4">
-        <span class="px-2 py-1 rounded text-white text-xs ${getStatusClass(a.status)}">${capitalize(a.status)}</span>
-      </td>
-      <td class="p-4 flex gap-2">
-        <button class="px-2 py-1 text-sm bg-blue-500 text-white rounded" onclick='openEditModal(${JSON.stringify(a)})'>Editar</button>
-        <button class="px-2 py-1 text-sm bg-red-500 text-white rounded" onclick='cancelAppointment("${a.id}")'>Eliminar</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+function openEditModal(a) {
+  document.getElementById("edit-id").value = a.id;
+  document.getElementById("edit-client").value = a.client;
+  document.getElementById("edit-pet").value = a.pet;
+  document.getElementById("edit-service").value = a.service;
+  document.getElementById("edit-modal").classList.remove("hidden");
+}
+
+function cancelAppointment(id) {
+  const index = appointments.findIndex(a => a.id === id);
+  if (index !== -1 && confirm("¿Seguro que deseas cancelar esta cita?")) {
+    appointments.splice(index, 1);
+    renderAppointments();
   }
 }
 
-// appointments.main.js
-function initComponent() {
-  const dateInput = document.getElementById("filter-date");
-  const statusSelect = document.getElementById("filter-status");
+document.addEventListener("DOMContentLoaded", () => {
   const doctorSelect = document.getElementById("filter-doctor");
-  const searchInput = document.getElementById("search-query");
-
-  const form = document.getElementById("edit-form");
-  const modal = document.getElementById("edit-modal");
-  const cancelBtn = document.getElementById("cancel-edit");
-
-  const fields = {
-    id: document.getElementById("edit-id"),
-    client: document.getElementById("edit-client"),
-    pet: document.getElementById("edit-pet"),
-    service: document.getElementById("edit-service")
-  };
-
-  window.openEditModal = function (a) {
-    fields.id.value = a.id;
-    fields.client.value = a.client;
-    fields.pet.value = a.pet;
-    fields.service.value = a.service;
-    modal.classList.remove("hidden");
-  };
-
-  window.cancelAppointment = function (id) {
-    const index = appointments.findIndex(a => a.id === id);
-    if (index !== -1 && confirm("¿Seguro que deseas cancelar esta cita?")) {
-      appointments.splice(index, 1);
-      renderAppointments(getFilters());
-    }
-  };
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const id = fields.id.value;
-    const index = appointments.findIndex(a => a.id === id);
-    if (index !== -1) {
-      appointments[index].client = fields.client.value;
-      appointments[index].pet = fields.pet.value;
-      appointments[index].service = fields.service.value;
-      modal.classList.add("hidden");
-      renderAppointments(getFilters());
-    }
-  });
-
-  cancelBtn.addEventListener("click", () => modal.classList.add("hidden"));
-
-  function getFilters() {
-    return {
-      date: dateInput.value,
-      status: statusSelect.value,
-      doctor: doctorSelect.value,
-      query: searchInput.value.toLowerCase()
-    };
-  }
-
-  // Unique doctors
-  [...new Set(appointments.map(a => a.doctor))].forEach(doctor => {
+  [...new Set(appointments.map(a => a.doctor))].forEach(doc => {
     const opt = document.createElement("option");
-    opt.value = doctor;
-    opt.textContent = doctor;
+    opt.value = doc;
+    opt.textContent = doc;
     doctorSelect.appendChild(opt);
   });
 
-  [dateInput, statusSelect, doctorSelect, searchInput].forEach(el => el.addEventListener("input", () => renderAppointments(getFilters())));
+  document.getElementById("edit-form").addEventListener("submit", e => {
+    e.preventDefault();
+    const id = document.getElementById("edit-id").value;
+    const index = appointments.findIndex(a => a.id === id);
+    if (index !== -1) {
+      appointments[index].client = document.getElementById("edit-client").value;
+      appointments[index].pet = document.getElementById("edit-pet").value;
+      appointments[index].service = document.getElementById("edit-service").value;
+      document.getElementById("edit-modal").classList.add("hidden");
+      renderAppointments();
+    }
+  });
 
-  renderAppointments(getFilters());
-}
+  document.getElementById("cancel-edit").addEventListener("click", () => {
+    document.getElementById("edit-modal").classList.add("hidden");
+  });
 
-document.addEventListener("DOMContentLoaded", initComponent);
+  ["filter-date", "filter-status", "filter-doctor", "search-query"].forEach(id => {
+    document.getElementById(id).addEventListener("input", renderAppointments);
+  });
+
+  renderAppointments();
+});
