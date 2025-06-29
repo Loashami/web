@@ -13,6 +13,7 @@ function initComplaints() {
   }
 
   function renderComplaints() {
+    console.log("🔄 renderComplaints()");
     const body = document.getElementById("complaintsBody");
     const search = document.getElementById("searchInput").value.toLowerCase();
     const status = document.getElementById("statusFilter").value;
@@ -24,6 +25,8 @@ function initComplaints() {
       const coincideBusqueda = cliente.includes(search) || asunto.includes(search);
       return coincideEstado && coincideBusqueda;
     });
+
+    console.log("📄 Quejas filtradas:", filtradas);
 
     body.innerHTML = filtradas.length === 0
       ? `<tr><td colspan="8" class="text-center p-4 text-gray-500">No se encontraron quejas.</td></tr>`
@@ -58,6 +61,7 @@ function initComplaints() {
   }
 
   function showModal(complaint) {
+    console.log("📌 Abriendo modal con:", complaint);
     selectedComplaint = complaint;
     document.getElementById("complaintModal").classList.remove("hidden");
     document.body.classList.add("modal-open");
@@ -89,6 +93,7 @@ function initComplaints() {
 
   window.markAsResolved = function () {
     if (selectedComplaint) {
+      console.log("✅ Marcando como resuelta:", selectedComplaint.id);
       selectedComplaint.estado = "resuelta";
       localStorage.setItem("complaints", JSON.stringify(complaints));
       renderComplaints();
@@ -107,6 +112,7 @@ function initComplaints() {
   }
 
   function initEvents() {
+    console.log("✅ Inicializando eventos");
     document.getElementById("searchInput").addEventListener("input", renderComplaints);
     document.getElementById("statusFilter").addEventListener("change", renderComplaints);
     document.addEventListener("keydown", e => {
@@ -125,8 +131,10 @@ function initComplaints() {
   function loadData() {
     const existente = localStorage.getItem("complaints");
     if (existente) {
+      console.log("📦 Cargando datos desde localStorage");
       complaints = JSON.parse(existente);
     } else {
+      console.log("🆕 Cargando quejas por defecto");
       complaints = [
         { id: "1", fecha: "2025-06-01", cliente: "Carlos Ruiz", correo: "carlos@gmail.com", celular: "912345678", asunto: "Demora en atención", descripcion: "Tuve que esperar más de 1 hora.", estado: "pendiente", veterinario: "Dr. Medina" },
         { id: "2", fecha: "2025-06-02", cliente: "María López", correo: "maria@gmail.com", celular: "913222456", asunto: "Cobro extra", descripcion: "Se me cobró un servicio que no recibí.", estado: "resuelta", veterinario: "Dra. Torres" },
@@ -139,11 +147,13 @@ function initComplaints() {
     }
   }
 
+  console.log("🚀 Iniciando initComplaints()");
   loadData();
   initEvents();
   renderComplaints();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("📄 DOM cargado. Llamando a initComplaints()");
   initComplaints();
 });
