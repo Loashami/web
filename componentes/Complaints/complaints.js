@@ -2,8 +2,8 @@ function initComplaints() {
   let complaints = [];
   let selectedComplaint = null;
 
-  function getStatusColor(status) {
-    return status === "pendiente"
+  function getStatusColor(estado) {
+    return estado === "pendiente"
       ? "bg-yellow-100 text-yellow-800"
       : "bg-green-100 text-green-800";
   }
@@ -13,24 +13,22 @@ function initComplaints() {
   }
 
   function renderComplaints() {
-    console.log("🔄 renderComplaints()");
     const body = document.getElementById("complaintsBody");
     const search = document.getElementById("searchInput").value.toLowerCase();
-    const status = document.getElementById("statusFilter").value;
+    const estado = document.getElementById("statusFilter").value;
 
     const filtradas = complaints.filter(c => {
       const cliente = c.cliente?.toLowerCase() || "";
       const asunto = c.asunto?.toLowerCase() || "";
-      const coincideEstado = status === "todas" || c.estado === status;
+      const coincideEstado = estado === "todas" || c.estado === estado;
       const coincideBusqueda = cliente.includes(search) || asunto.includes(search);
       return coincideEstado && coincideBusqueda;
     });
 
-    console.log("📄 Quejas filtradas:", filtradas);
-
-    body.innerHTML = filtradas.length === 0
-      ? `<tr><td colspan="8" class="text-center p-4 text-gray-500">No se encontraron quejas.</td></tr>`
-      : filtradas.map(c => `
+    if (filtradas.length === 0) {
+      body.innerHTML = `<tr><td colspan="8" class="text-center p-4 text-gray-500">No se encontraron quejas.</td></tr>`;
+    } else {
+      body.innerHTML = filtradas.map(c => `
         <tr class="hover:bg-gray-50">
           <td class="p-3">${new Date(c.fecha).toLocaleDateString()}</td>
           <td class="p-3 font-medium">${c.cliente}</td>
@@ -48,6 +46,7 @@ function initComplaints() {
           </td>
         </tr>
       `).join("");
+    }
 
     document.querySelectorAll(".view-btn").forEach(btn => {
       btn.addEventListener("click", (e) => {
@@ -61,7 +60,6 @@ function initComplaints() {
   }
 
   function showModal(complaint) {
-    console.log("📌 Abriendo modal con:", complaint);
     selectedComplaint = complaint;
     document.getElementById("complaintModal").classList.remove("hidden");
     document.body.classList.add("modal-open");
@@ -93,7 +91,6 @@ function initComplaints() {
 
   window.markAsResolved = function () {
     if (selectedComplaint) {
-      console.log("✅ Marcando como resuelta:", selectedComplaint.id);
       selectedComplaint.estado = "resuelta";
       localStorage.setItem("complaints", JSON.stringify(complaints));
       renderComplaints();
@@ -112,7 +109,6 @@ function initComplaints() {
   }
 
   function initEvents() {
-    console.log("✅ Inicializando eventos");
     document.getElementById("searchInput").addEventListener("input", renderComplaints);
     document.getElementById("statusFilter").addEventListener("change", renderComplaints);
     document.addEventListener("keydown", e => {
@@ -129,12 +125,19 @@ function initComplaints() {
   }
 
   function loadData() {
-    const existente = localStorage.getItem("complaints");
-    if (existente) {
-      console.log("📦 Cargando datos desde localStorage");
-      complaints = JSON.parse(existente);
-    } else {
-      console.log("🆕 Cargando quejas por defecto");
+    let dataOK = false;
+    try {
+      const raw = localStorage.getItem("complaints");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        dataOK = Array.isArray(parsed) && parsed.every(c => c.cliente && c.estado);
+        if (dataOK) complaints = parsed;
+      }
+    } catch (e) {
+      console.warn("⚠️ Datos corruptos en localStorage. Serán reemplazados.");
+    }
+
+    if (!dataOK) {
       complaints = [
         { id: "1", fecha: "2025-06-01", cliente: "Carlos Ruiz", correo: "carlos@gmail.com", celular: "912345678", asunto: "Demora en atención", descripcion: "Tuve que esperar más de 1 hora.", estado: "pendiente", veterinario: "Dr. Medina" },
         { id: "2", fecha: "2025-06-02", cliente: "María López", correo: "maria@gmail.com", celular: "913222456", asunto: "Cobro extra", descripcion: "Se me cobró un servicio que no recibí.", estado: "resuelta", veterinario: "Dra. Torres" },
@@ -147,13 +150,11 @@ function initComplaints() {
     }
   }
 
-  console.log("🚀 Iniciando initComplaints()");
   loadData();
   initEvents();
   renderComplaints();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("📄 DOM cargado. Llamando a initComplaints()");
   initComplaints();
 });
