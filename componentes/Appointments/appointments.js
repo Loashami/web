@@ -1,23 +1,24 @@
 function initComponent() {
-  const appointments = [
-    { id: "1", date: "2025-05-20", time: "10:00 AM", client: "John Doe", pet: "Max (Dog)", petType: "Golden Retriever, 5 years", service: "Vaccination", doctor: "Dr. Sarah Johnson", status: "confirmed" },
-    { id: "2", date: "2025-05-20", time: "11:30 AM", client: "Sarah Smith", pet: "Bella (Cat)", petType: "Siamese, 3 years", service: "Check-up", doctor: "Dr. Michael Chen", status: "confirmed" },
-    { id: "3", date: "2025-05-20", time: "2:00 PM", client: "Michael Johnson", pet: "Rocky (Dog)", petType: "Bulldog, 2 years", service: "Dental Cleaning", doctor: "Dr. Emily Rodriguez", status: "confirmed" },
-    { id: "4", date: "2025-05-21", time: "9:30 AM", client: "Emily Davis", pet: "Luna (Cat)", petType: "Maine Coon, 4 years", service: "Vaccination", doctor: "Dr. Sarah Johnson", status: "confirmed" },
-    { id: "5", date: "2025-05-21", time: "1:00 PM", client: "David Wilson", pet: "Charlie (Bird)", petType: "Cockatiel, 1 year", service: "Wing Trimming", doctor: "Dr. David Kim", status: "confirmed" },
-    { id: "6", date: "2025-05-22", time: "10:00 AM", client: "Jennifer Brown", pet: "Cooper (Dog)", petType: "Beagle, 6 years", service: "Check-up", doctor: "Dr. Sarah Johnson", status: "confirmed" },
-    { id: "7", date: "2025-05-19", time: "3:30 PM", client: "Robert Garcia", pet: "Daisy (Dog)", petType: "Poodle, 4 years", service: "Grooming", doctor: "Dr. Michael Chen", status: "completed" },
-    { id: "8", date: "2025-05-19", time: "2:00 PM", client: "Amanda Lee", pet: "Oliver (Cat)", petType: "Tabby, 2 years", service: "Vaccination", doctor: "Dr. Emily Rodriguez", status: "completed" },
-    { id: "9", date: "2025-05-18", time: "11:00 AM", client: "Thomas Martinez", pet: "Milo (Dog)", petType: "Labrador, 3 years", service: "Check-up", doctor: "Dr. David Kim", status: "cancelled" }
-  ];
+const appointments = [
+  { id: "1", date: "2025-05-20", time: "10:00 AM", client: "John Doe", pet: "Max (Dog)", petType: "Golden Retriever, 5 años", service: "Vacunación", doctor: "Dra. Sarah Johnson", status: "confirmada" },
+  { id: "2", date: "2025-05-20", time: "11:30 AM", client: "Sarah Smith", pet: "Bella (Gato)", petType: "Siamés, 3 años", service: "Revisión", doctor: "Dr. Michael Chen", status: "confirmada" },
+  { id: "3", date: "2025-05-20", time: "2:00 PM", client: "Michael Johnson", pet: "Rocky (Perro)", petType: "Bulldog, 2 años", service: "Limpieza dental", doctor: "Dra. Emily Rodríguez", status: "confirmada" },
+  { id: "4", date: "2025-05-21", time: "9:30 AM", client: "Emily Davis", pet: "Luna (Gato)", petType: "Maine Coon, 4 años", service: "Vacunación", doctor: "Dra. Sarah Johnson", status: "confirmada" },
+  { id: "5", date: "2025-05-22", time: "10:00 AM", client: "Jennifer Brown", pet: "Cooper (Perro)", petType: "Beagle, 6 años", service: "Revisión", doctor: "Dra. Sarah Johnson", status: "confirmada" },
+  { id: "6", date: "2025-05-19", time: "3:30 PM", client: "Robert Garcia", pet: "Daisy (Perro)", petType: "Poodle, 4 años", service: "Estética", doctor: "Dr. Michael Chen", status: "completada" },
+  { id: "7", date: "2025-05-19", time: "2:00 PM", client: "Amanda Lee", pet: "Oliver (Gato)", petType: "Atigrado, 2 años", service: "Vacunación", doctor: "Dra. Emily Rodríguez", status: "completada" },
+  { id: "8", date: "2025-05-18", time: "11:00 AM", client: "Thomas Martinez", pet: "Milo (Perro)", petType: "Labrador, 3 años", service: "Revisión", doctor: "Dr. David Kim", status: "cancelada" }
+];
+
 
   function getStatusClass(status) {
-    return {
-      confirmed: "bg-blue-500",
-      completed: "bg-green-500",
-      cancelled: "bg-red-500"
-    }[status] || "bg-gray-400";
-  }
+  return {
+    confirmada: "bg-blue-500",
+    completada: "bg-green-500",
+    cancelada: "bg-red-500"
+  }[status] || "bg-gray-400";
+}
+
 
   function capitalize(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -82,7 +83,11 @@ function initComponent() {
     }
   }
 
-  // Inicializar
+  // 👇 Hacemos visibles las funciones desde el HTML
+  window.openEditModal = openEditModal;
+  window.cancelAppointment = cancelAppointment;
+
+  // Poblamos filtro de doctores
   const doctorSelect = document.getElementById("filter-doctor");
   [...new Set(appointments.map(a => a.doctor))].forEach(doc => {
     const opt = document.createElement("option");
@@ -91,6 +96,7 @@ function initComponent() {
     doctorSelect.appendChild(opt);
   });
 
+  // Eventos
   document.getElementById("edit-form").addEventListener("submit", e => {
     e.preventDefault();
     const id = document.getElementById("edit-id").value;
