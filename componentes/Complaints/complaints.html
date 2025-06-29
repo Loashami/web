@@ -11,12 +11,14 @@
       to { opacity: 1; transform: scale(1); }
     }
     .animate-fade-in { animation: fade-in 0.2s ease-out forwards; }
+
     .toast {
       animation: fade-in 0.3s ease-out, fade-out 0.3s ease-in 2.5s forwards;
     }
     @keyframes fade-out {
       to { opacity: 0; transform: translateY(-10px); }
     }
+
     body.modal-open { overflow: hidden; }
   </style>
 </head>
@@ -32,7 +34,7 @@
           <option value="resuelta">Resuelta</option>
         </select>
 
-        <input id="searchInput" type="text" placeholder="Buscar por cliente o asunto..." class="border rounded-md p-2 w-full flex-1">
+        <input id="searchInput" type="text" placeholder="Buscar quejas..." class="border rounded-md p-2 w-full flex-1">
       </div>
 
       <div class="overflow-x-auto border rounded-md bg-white">
@@ -57,6 +59,7 @@
     </main>
   </div>
 
+  <!-- Modal -->
   <div id="complaintModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div id="modalBox" class="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl max-h-[80vh] overflow-y-auto animate-fade-in">
       <h2 class="text-xl font-bold mb-2 text-gray-800">Detalles de la Queja</h2>
@@ -68,8 +71,15 @@
     </div>
   </div>
 
+  <!-- Toast -->
   <div id="toastContainer" class="fixed top-6 right-6 space-y-2 z-[1000]"></div>
 
+  <!-- Script -->
   <script src="complaints.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      initComplaints();
+    });
+  </script>
 </body>
 </html>
