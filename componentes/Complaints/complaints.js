@@ -1,5 +1,13 @@
 function initComplaints() {
-  let complaints = [];
+  const complaints = [
+    { id: "1", fecha: "2025-06-01", cliente: "Carlos Ruiz", correo: "carlos@gmail.com", celular: "912345678", asunto: "Demora en atención", descripcion: "Tuve que esperar más de 1 hora.", estado: "pendiente", veterinario: "Dr. Medina" },
+    { id: "2", fecha: "2025-06-02", cliente: "María López", correo: "maria@gmail.com", celular: "913222456", asunto: "Cobro extra", descripcion: "Se me cobró un servicio que no recibí.", estado: "resuelta", veterinario: "Dra. Torres" },
+    { id: "3", fecha: "2025-06-03", cliente: "Pedro Salas", correo: "pedro.s@gmail.com", celular: "934567321", asunto: "No me respondieron", descripcion: "Llamé varias veces y nadie respondió.", estado: "pendiente", veterinario: "Dra. Ramos" },
+    { id: "4", fecha: "2025-06-04", cliente: "Lucía Díaz", correo: "lucia.diaz@gmail.com", celular: "900111222", asunto: "Mala atención", descripcion: "El veterinario fue grosero conmigo.", estado: "resuelta", veterinario: "Dr. Romero" },
+    { id: "5", fecha: "2025-06-05", cliente: "Andrés Moreno", correo: "andres.m@gmail.com", celular: "987333444", asunto: "Error en diagnóstico", descripcion: "Me dijeron que mi mascota tenía otra cosa.", estado: "pendiente", veterinario: "Dra. Camargo" },
+    { id: "6", fecha: "2025-06-06", cliente: "Claudia Vega", correo: "claudia.v@gmail.com", celular: "956987321", asunto: "No entregaron receta", descripcion: "No me dieron el medicamento indicado.", estado: "pendiente", veterinario: "Dr. Salazar" }
+  ];
+
   let selectedComplaint = null;
 
   function getStatusColor(estado) {
@@ -59,7 +67,7 @@ function initComplaints() {
     document.getElementById("resultCount").textContent = `${filtradas.length} queja(s) encontrada(s)`;
   }
 
-  function showModal(complaint) {
+  window.showModal = function (complaint) {
     selectedComplaint = complaint;
     document.getElementById("complaintModal").classList.remove("hidden");
     document.body.classList.add("modal-open");
@@ -82,7 +90,7 @@ function initComplaints() {
     } else {
       actions.classList.remove("hidden");
     }
-  }
+  };
 
   window.closeModal = function () {
     document.getElementById("complaintModal").classList.add("hidden");
@@ -92,7 +100,6 @@ function initComplaints() {
   window.markAsResolved = function () {
     if (selectedComplaint) {
       selectedComplaint.estado = "resuelta";
-      localStorage.setItem("complaints", JSON.stringify(complaints));
       renderComplaints();
       closeModal();
       showToast("La queja ha sido marcada como resuelta.");
@@ -108,53 +115,19 @@ function initComplaints() {
     setTimeout(() => toast.remove(), 3000);
   }
 
-  function initEvents() {
-    document.getElementById("searchInput").addEventListener("input", renderComplaints);
-    document.getElementById("statusFilter").addEventListener("change", renderComplaints);
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeModal();
-    });
-    document.addEventListener("click", function (e) {
-      const modal = document.getElementById("complaintModal");
-      const box = document.getElementById("modalBox");
-      if (e.target.closest(".view-btn")) return;
-      if (!modal.classList.contains("hidden") && !box.contains(e.target)) {
-        closeModal();
-      }
-    });
-  }
-
-  function loadData() {
-    let dataOK = false;
-    try {
-      const raw = localStorage.getItem("complaints");
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        dataOK = Array.isArray(parsed) && parsed.every(c => c.cliente && c.estado);
-        if (dataOK) complaints = parsed;
-      }
-    } catch (e) {
-      console.warn("⚠️ Datos corruptos en localStorage. Serán reemplazados.");
+  document.getElementById("searchInput").addEventListener("input", renderComplaints);
+  document.getElementById("statusFilter").addEventListener("change", renderComplaints);
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeModal();
+  });
+  document.addEventListener("click", function (e) {
+    const modal = document.getElementById("complaintModal");
+    const box = document.getElementById("modalBox");
+    if (e.target.closest(".view-btn")) return;
+    if (!modal.classList.contains("hidden") && !box.contains(e.target)) {
+      closeModal();
     }
+  });
 
-    if (!dataOK) {
-      complaints = [
-        { id: "1", fecha: "2025-06-01", cliente: "Carlos Ruiz", correo: "carlos@gmail.com", celular: "912345678", asunto: "Demora en atención", descripcion: "Tuve que esperar más de 1 hora.", estado: "pendiente", veterinario: "Dr. Medina" },
-        { id: "2", fecha: "2025-06-02", cliente: "María López", correo: "maria@gmail.com", celular: "913222456", asunto: "Cobro extra", descripcion: "Se me cobró un servicio que no recibí.", estado: "resuelta", veterinario: "Dra. Torres" },
-        { id: "3", fecha: "2025-06-03", cliente: "Pedro Salas", correo: "pedro.s@gmail.com", celular: "934567321", asunto: "No me respondieron", descripcion: "Llamé varias veces y nadie respondió.", estado: "pendiente", veterinario: "Dra. Ramos" },
-        { id: "4", fecha: "2025-06-04", cliente: "Lucía Díaz", correo: "lucia.diaz@gmail.com", celular: "900111222", asunto: "Mala atención", descripcion: "El veterinario fue grosero conmigo.", estado: "resuelta", veterinario: "Dr. Romero" },
-        { id: "5", fecha: "2025-06-05", cliente: "Andrés Moreno", correo: "andres.m@gmail.com", celular: "987333444", asunto: "Error en diagnóstico", descripcion: "Me dijeron que mi mascota tenía otra cosa.", estado: "pendiente", veterinario: "Dra. Camargo" },
-        { id: "6", fecha: "2025-06-06", cliente: "Claudia Vega", correo: "claudia.v@gmail.com", celular: "956987321", asunto: "No entregaron receta", descripcion: "No me dieron el medicamento indicado.", estado: "pendiente", veterinario: "Dr. Salazar" }
-      ];
-      localStorage.setItem("complaints", JSON.stringify(complaints));
-    }
-  }
-
-  loadData();
-  initEvents();
   renderComplaints();
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  initComplaints();
-});
