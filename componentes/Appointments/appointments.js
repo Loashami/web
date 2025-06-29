@@ -1,27 +1,22 @@
 function initComponent() {
-const appointments = [
-  { id: "1", date: "2025-05-20", time: "10:00 AM", client: "John Doe", pet: "Max (Dog)", petType: "Golden Retriever, 5 años", service: "Vacunación", doctor: "Dra. Sarah Johnson", status: "confirmada" },
-  { id: "2", date: "2025-05-20", time: "11:30 AM", client: "Sarah Smith", pet: "Bella (Gato)", petType: "Siamés, 3 años", service: "Revisión", doctor: "Dr. Michael Chen", status: "confirmada" },
-  { id: "3", date: "2025-05-20", time: "2:00 PM", client: "Michael Johnson", pet: "Rocky (Perro)", petType: "Bulldog, 2 años", service: "Limpieza dental", doctor: "Dra. Emily Rodríguez", status: "confirmada" },
-  { id: "4", date: "2025-05-21", time: "9:30 AM", client: "Emily Davis", pet: "Luna (Gato)", petType: "Maine Coon, 4 años", service: "Vacunación", doctor: "Dra. Sarah Johnson", status: "confirmada" },
-  { id: "5", date: "2025-05-22", time: "10:00 AM", client: "Jennifer Brown", pet: "Cooper (Perro)", petType: "Beagle, 6 años", service: "Revisión", doctor: "Dra. Sarah Johnson", status: "confirmada" },
-  { id: "6", date: "2025-05-19", time: "3:30 PM", client: "Robert Garcia", pet: "Daisy (Perro)", petType: "Poodle, 4 años", service: "Estética", doctor: "Dr. Michael Chen", status: "completada" },
-  { id: "7", date: "2025-05-19", time: "2:00 PM", client: "Amanda Lee", pet: "Oliver (Gato)", petType: "Atigrado, 2 años", service: "Vacunación", doctor: "Dra. Emily Rodríguez", status: "completada" },
-  { id: "8", date: "2025-05-18", time: "11:00 AM", client: "Thomas Martinez", pet: "Milo (Perro)", petType: "Labrador, 3 años", service: "Revisión", doctor: "Dr. David Kim", status: "cancelada" }
-];
-
+  const appointments = [
+    { id: "1", date: "2025-05-20", time: "10:00 AM", client: "John Doe", pet: "Max (Perro)", petType: "Golden Retriever, 5 años", service: "Vacunación", doctor: "Dra. Sarah Johnson", status: "confirmada" },
+    { id: "2", date: "2025-05-20", time: "11:30 AM", client: "Sarah Smith", pet: "Bella (Gato)", petType: "Siamés, 3 años", service: "Revisión", doctor: "Dr. Michael Chen", status: "confirmada" },
+    { id: "3", date: "2025-05-20", time: "2:00 PM", client: "Michael Johnson", pet: "Rocky (Perro)", petType: "Bulldog, 2 años", service: "Limpieza dental", doctor: "Dra. Emily Rodríguez", status: "confirmada" },
+    { id: "4", date: "2025-05-21", time: "9:30 AM", client: "Emily Davis", pet: "Luna (Gato)", petType: "Maine Coon, 4 años", service: "Vacunación", doctor: "Dra. Sarah Johnson", status: "confirmada" },
+    { id: "5", date: "2025-05-21", time: "1:00 PM", client: "David Wilson", pet: "Charlie (Ave)", petType: "Cacatúa, 1 año", service: "Recorte de alas", doctor: "Dr. David Kim", status: "confirmada" },
+    { id: "6", date: "2025-05-22", time: "10:00 AM", client: "Jennifer Brown", pet: "Cooper (Perro)", petType: "Beagle, 6 años", service: "Revisión", doctor: "Dra. Sarah Johnson", status: "confirmada" },
+    { id: "7", date: "2025-05-19", time: "3:30 PM", client: "Robert Garcia", pet: "Daisy (Perro)", petType: "Poodle, 4 años", service: "Estética", doctor: "Dr. Michael Chen", status: "completada" },
+    { id: "8", date: "2025-05-19", time: "2:00 PM", client: "Amanda Lee", pet: "Oliver (Gato)", petType: "Atigrado, 2 años", service: "Vacunación", doctor: "Dra. Emily Rodríguez", status: "completada" },
+    { id: "9", date: "2025-05-18", time: "11:00 AM", client: "Thomas Martinez", pet: "Milo (Perro)", petType: "Labrador, 3 años", service: "Revisión", doctor: "Dr. David Kim", status: "cancelada" }
+  ];
 
   function getStatusClass(status) {
-  return {
-    confirmada: "bg-blue-500",
-    completada: "bg-green-500",
-    cancelada: "bg-red-500"
-  }[status] || "bg-gray-400";
-}
-
-
-  function capitalize(word) {
-    return word.charAt(0).toUpperCase() + word.slice(1);
+    return {
+      confirmada: "bg-blue-500",
+      completada: "bg-green-500",
+      cancelada: "bg-red-500"
+    }[status] || "bg-gray-400";
   }
 
   function getFilters() {
@@ -57,7 +52,7 @@ const appointments = [
           <td class="p-4">${a.service}</td>
           <td class="p-4">${a.doctor}</td>
           <td class="p-4">
-            <span class="px-2 py-1 rounded text-white text-xs ${getStatusClass(a.status)}">${capitalize(a.status)}</span>
+            <span class="px-2 py-1 rounded text-white text-xs ${getStatusClass(a.status)}">${a.status}</span>
           </td>
           <td class="p-4 flex gap-2">
             <button class="px-2 py-1 text-sm bg-blue-500 text-white rounded" onclick='openEditModal(${JSON.stringify(a)})'>Editar</button>
@@ -83,11 +78,11 @@ const appointments = [
     }
   }
 
-  // 👇 Hacemos visibles las funciones desde el HTML
+  // Exponer funciones para botones
   window.openEditModal = openEditModal;
   window.cancelAppointment = cancelAppointment;
 
-  // Poblamos filtro de doctores
+  // Poblar doctores
   const doctorSelect = document.getElementById("filter-doctor");
   [...new Set(appointments.map(a => a.doctor))].forEach(doc => {
     const opt = document.createElement("option");
