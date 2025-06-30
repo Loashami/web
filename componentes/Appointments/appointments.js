@@ -21,15 +21,17 @@ function initComponent() {
 
   function getFilters() {
     return {
-      date: document.getElementById("filter-date").value,
-      status: document.getElementById("filter-status").value,
-      doctor: document.getElementById("filter-doctor").value,
-      query: document.getElementById("search-query").value.toLowerCase()
+      date: document.getElementById("filter-date")?.value,
+      status: document.getElementById("filter-status")?.value,
+      doctor: document.getElementById("filter-doctor")?.value,
+      query: document.getElementById("search-query")?.value.toLowerCase()
     };
   }
 
   function renderAppointments() {
     const tbody = document.getElementById("appointment-body");
+    if (!tbody) return;
+
     const { date, status, doctor, query } = getFilters();
 
     const filtered = appointments.filter(a =>
@@ -78,21 +80,21 @@ function initComponent() {
     }
   }
 
-  // Exponer funciones para botones
   window.openEditModal = openEditModal;
   window.cancelAppointment = cancelAppointment;
 
-  // Poblar doctores
   const doctorSelect = document.getElementById("filter-doctor");
-  [...new Set(appointments.map(a => a.doctor))].forEach(doc => {
-    const opt = document.createElement("option");
-    opt.value = doc;
-    opt.textContent = doc;
-    doctorSelect.appendChild(opt);
-  });
+  if (doctorSelect) {
+    [...new Set(appointments.map(a => a.doctor))].forEach(doc => {
+      const opt = document.createElement("option");
+      opt.value = doc;
+      opt.textContent = doc;
+      doctorSelect.appendChild(opt);
+    });
+  }
 
-  // Eventos
-  document.getElementById("edit-form").addEventListener("submit", e => {
+  const form = document.getElementById("edit-form");
+  form?.addEventListener("submit", e => {
     e.preventDefault();
     const id = document.getElementById("edit-id").value;
     const index = appointments.findIndex(a => a.id === id);
@@ -105,12 +107,13 @@ function initComponent() {
     }
   });
 
-  document.getElementById("cancel-edit").addEventListener("click", () => {
+  document.getElementById("cancel-edit")?.addEventListener("click", () => {
     document.getElementById("edit-modal").classList.add("hidden");
   });
 
   ["filter-date", "filter-status", "filter-doctor", "search-query"].forEach(id => {
-    document.getElementById(id).addEventListener("input", renderAppointments);
+    const el = document.getElementById(id);
+    el?.addEventListener("input", renderAppointments);
   });
 
   renderAppointments();
