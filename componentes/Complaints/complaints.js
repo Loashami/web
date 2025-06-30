@@ -1,3 +1,5 @@
+console.log("initComplaints ejecutado");
+
 function initComplaints() {
   const complaints = [
     { id: "1", fecha: "2025-06-01", cliente: "Carlos Ruiz", correo: "carlos@gmail.com", celular: "912345678", asunto: "Demora en atención", descripcion: "Tuve que esperar más de 1 hora.", estado: "pendiente", veterinario: "Dr. Medina" },
