@@ -1,0 +1,12 @@
+# Forzar fin de línea LF en los archivos comunes
+*.js     text eol=lf
+*.css    text eol=lf
+*.html   text eol=lf
+*.json   text eol=lf
+*.md     text eol=lf
+
+# Archivos binarios (no tocar líneas)
+*.png    binary
+*.jpg    binary
+*.gif    binary
+*.ico    binary
