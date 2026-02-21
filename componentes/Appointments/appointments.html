@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Appointments Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex">
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+      <div class="container mx-auto">
+        <h1 class="mb-8 text-3xl font-bold">Appointments Management</h1>
+
+        <!-- Filters -->
+        <div class="mb-6 flex flex-wrap items-center gap-4">
+          <input type="date" id="filter-date" class="border px-3 py-2 rounded w-[240px]" />
+
+          <select id="filter-status" class="border px-3 py-2 rounded w-[180px]">
+            <option value="all">All Statuses</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+
+          <select id="filter-doctor" class="border px-3 py-2 rounded w-[240px]">
+            <option value="all">All Doctors</option>
+          </select>
+
+          <div class="relative flex-1 md:max-w-xs">
+            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            <input type="text" id="search-query" placeholder="Search client or pet..." class="pl-10 border px-3 py-2 rounded w-full" />
+          </div>
+        </div>
+
+        <!-- Appointment Table -->
+        <div class="bg-white rounded shadow">
+          <div class="p-4 border-b">
+            <h2 class="text-xl font-semibold">Appointments</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-100 text-gray-600">
+                <tr>
+                  <th class="p-4 text-left">Time</th>
+                  <th class="p-4 text-left">Client</th>
+                  <th class="p-4 text-left">Pet</th>
+                  <th class="p-4 text-left">Service</th>
+                  <th class="p-4 text-left">Doctor</th>
+                  <th class="p-4 text-left">Status</th>
+                  <th class="p-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appointment-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="appointments.js"></script>
+</body>
+</html>
