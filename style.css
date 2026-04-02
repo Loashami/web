@@ -1,0 +1,10 @@
+
+    .sidebar-link.active {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .sidebar-link:hover {
+      background-color: #f9fafb;
+      color: #111827;
+    }

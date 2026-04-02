@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Citas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; font-size: 14px; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+  <div class="flex">
+    <main class="flex-1 p-6">
+      <div class="container mx-auto">
+        <h1 class="mb-8 text-3xl font-bold">Gestión de Citas</h1>
+
+        <!-- Filtros -->
+        <div class="mb-6 flex flex-wrap items-center gap-4">
+          <input type="date" id="filter-date" class="border px-3 py-2 rounded w-[240px]" />
+          <select id="filter-status" class="border px-3 py-2 rounded w-[180px]">
+            <option value="all">Todos los estados</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="completada">Completada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+          <select id="filter-doctor" class="border px-3 py-2 rounded w-[240px]">
+            <option value="all">Todos los doctores</option>
+          </select>
+          <div class="relative flex-1 md:max-w-xs">
+            <input type="text" id="search-query" placeholder="Buscar cliente o mascota..." class="pl-10 border px-3 py-2 rounded w-full" />
+            <svg class="w-4 h-4 absolute left-3 top-3 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Tabla de Citas -->
+        <div class="bg-white rounded shadow">
+          <div class="p-4 border-b">
+            <h2 class="text-xl font-semibold">Citas Programadas</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-100 text-gray-600">
+                <tr>
+                  <th class="p-4 text-left">Hora</th>
+                  <th class="p-4 text-left">Cliente</th>
+                  <th class="p-4 text-left">Mascota</th>
+                  <th class="p-4 text-left">Servicio</th>
+                  <th class="p-4 text-left">Doctor</th>
+                  <th class="p-4 text-left">Estado</th>
+                  <th class="p-4 text-left">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="appointment-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal de edición -->
+  <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <h3 class="text-xl font-bold mb-4">Editar cita</h3>
+      <form id="edit-form" class="space-y-4">
+        <input type="hidden" id="edit-id" />
+        <div>
+          <label class="block text-sm font-medium">Cliente</label>
+          <input id="edit-client" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Mascota</label>
+          <input id="edit-pet" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Servicio</label>
+          <input id="edit-service" type="text" class="w-full border rounded px-3 py-2" required />
+        </div>
+        <div class="flex justify-end gap-3 mt-4">
+          <button type="button" id="cancel-edit" class="px-4 py-2 text-sm rounded border text-gray-600 hover:bg-gray-100 transition">Cancelar</button>
+          <button type="submit" class="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="appointments.js"></script>
+</body>
+</html>

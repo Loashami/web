@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Usuarios</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <main class="p-6">
+    <div class="container mx-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Gestión de Usuarios</h1>
+        <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Nuevo Usuario</button>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div class="flex gap-2 flex-wrap">
+          <button data-tab="all" class="tab-btn px-3 py-1 rounded bg-blue-100 text-blue-600">Todos</button>
+          <button data-tab="veterinario" class="tab-btn px-3 py-1 rounded">Veterinarios</button>
+          <button data-tab="cliente" class="tab-btn px-3 py-1 rounded">Clientes</button>
+          <button data-tab="interno" class="tab-btn px-3 py-1 rounded">Internos</button>
+          <button data-tab="administrador" class="tab-btn px-3 py-1 rounded">Administradores</button>
+        </div>
+        <div class="relative">
+          <input id="searchInput" type="text" placeholder="Buscar usuarios..." class="pl-8 pr-4 py-2 border rounded w-64">
+          <svg class="absolute left-2 top-2.5 h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1 0 3 10.5a7.5 7.5 0 0 0 13.65 6.15z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="bg-white rounded shadow overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="p-3 text-left">Nombre</th>
+              <th class="p-3 text-left">Correo</th>
+              <th class="p-3 text-left">Rol</th>
+              <th class="p-3 text-left">Detalles</th>
+              <th class="p-3 text-left">Estado</th>
+              <th class="p-3 text-left">Última actividad</th>
+              <th class="p-3 text-left">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md mx-auto">
+      <h2 class="text-xl font-bold mb-4" id="modalTitle">Agregar Nuevo Usuario</h2>
+      <form id="userForm" class="space-y-4">
+        <input type="hidden" id="editUserId">
+        <div>
+          <label class="block text-sm font-medium">Nombre</label>
+          <input type="text" id="userName" required class="w-full border rounded px-3 py-2 mt-1">
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Correo Electrónico</label>
+          <input type="email" id="userEmail" required class="w-full border rounded px-3 py-2 mt-1">
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Rol</label>
+          <select id="userRole" required class="w-full border rounded px-3 py-2 mt-1">
+            <option value="">Seleccionar rol</option>
+            <option value="veterinario">Veterinario</option>
+            <option value="cliente">Cliente</option>
+            <option value="interno">Interno</option>
+            <option value="administrador">Administrador</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-2">
+          <button type="button" id="cancelModal" class="px-4 py-2 border rounded">Cancelar</button>
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="users.js"></script>
+</body>
+</html>

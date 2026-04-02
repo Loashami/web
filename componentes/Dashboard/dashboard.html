@@ -1,0 +1,52 @@
+<h1 class="text-3xl font-bold mb-8">Administrator Dashboard</h1>
+
+<!-- Summary Cards -->
+<div class="grid gap-6 md:grid-cols-3">
+  <div class="bg-white shadow-md rounded-xl p-4">
+    <div class="flex items-center mb-2">
+      <i data-lucide="calendar" class="text-blue-500 w-10 h-10"></i>
+      <div class="ml-4">
+        <p class="text-3xl font-bold" id="appointments-today">--</p>
+        <p class="text-sm text-gray-500">Appointments today</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white shadow-md rounded-xl p-4">
+    <div class="flex items-center mb-2">
+      <i data-lucide="dollar-sign" class="text-green-500 w-10 h-10"></i>
+      <div class="ml-4">
+        <p class="text-3xl font-bold" id="revenue-week">$--</p>
+        <p class="text-sm text-gray-500">This week</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white shadow-md rounded-xl p-4">
+    <div class="flex items-center mb-2">
+      <i data-lucide="x-circle" class="text-red-500 w-10 h-10"></i>
+      <div class="ml-4">
+        <p class="text-3xl font-bold" id="cancellations">--</p>
+        <p class="text-sm text-gray-500">This week</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart and Alerts -->
+<div class="grid gap-6 md:grid-cols-3 mt-8">
+  <!-- Chart -->
+  <div class="md:col-span-2 bg-white shadow-md rounded-xl p-4">
+    <h2 class="text-lg font-bold mb-2">Monthly Revenue</h2>
+    <canvas id="revenueChart" height="100"></canvas>
+  </div>
+
+  <!-- Alerts -->
+  <div class="bg-white shadow-md rounded-xl p-4">
+    <h2 class="text-lg font-bold mb-4">Recent Alerts</h2>
+    <div class="space-y-4" id="alert-container">
+      <!-- Alert cards se llenan por JS -->
+    </div>
+  </div>
+  <script src="dashboard.js"></script>
+</div>
